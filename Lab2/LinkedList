@@ -1,1 +1,155 @@
+#include<iostream>
+#include<cmath>
+#include<tuple>
+#include<cstdlib>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct node{
+int a,b;
+struct node* ptr;
+};
+
+struct node* start=NULL;
+  
+void AddFirst( int x,int y )
+{  
+   node* newnode = (node*) malloc(sizeof(struct node));
+   newnode->a=x;
+   newnode->b=y;
+   newnode->ptr= (start);
+   (start)=newnode;
+}
+
+
+void DelFirst()
+{
+    struct node* temp = start; 
+    if(start==NULL)
+    {return; }
+    if(start!=NULL)
+    start = start->ptr; 
+    free(temp);
+     
+} 
+
+void search(int x,int y)  
+{  
+    node* current = start;
+    int count=0;
+
+    while (current != NULL)  
+    {   if (current->a == x && current->b == y) 
+           {cout<<"True:The given point exists";  
+            count++;
+           }
+        current = current->ptr;
+    }  
+    if(count=0) cout<<"False:The point doesn't exist";
+}  
+
+void deleteNode(int x,int y) 
+{  
+    node* current = start;
+    node* prev =(struct node*)malloc(sizeof(struct node));;
+     
+   if(current == NULL) 
+   {cout<<"LinkedList is empty";
+   return; 
+   }
+
+   if((current->a==x) && (current->b==y)  )
+   {start=current->ptr;
+    cout<<"The node is deleted";
+    free(current);
+    return;
+   }
+    
+    prev = current;
+    current=current->ptr;
+    
+    while (current != NULL)  
+    {   int p,q;
+        p=current->a;
+        q=current->b;
+        if (current->a == x && current->b == y) 
+           {prev->ptr=current->ptr;
+            free(current);
+            cout<<"The node is deleted";
+            return;
+           }
+    }  
+
+cout<<"Node Doesn't exist or cannot be deleted";
+return;
+}
+
+int length()
+{   int count = 0;
+    node* current = start;
+    while (current != NULL)  
+    {   count++;  
+        current = current->ptr;  
+    }  
+    return count;
+}
+
+void distance(int d)
+{   node* current = start;
+    while (current != NULL)  
+    {   int p,q;
+        current->a=p;
+        current->b=q;
+        if ((p*p+q*q) <= d*d) 
+        cout<<"The point satisfying the condition is:"<<"("<<p<<","<<q<<")"<<"\n";
+        current = current->ptr;
+    }  
+}
+
+int main()
+{ 
+  cout<<"Enter the number of times you want to test:";
+  int testcase;
+  cin>>testcase;
+  
+  int func;
+  cin>>func;
+
+  while(testcase)
+ {
+  
+  if(func==1) 
+  {  int m,n;
+     cin>>m>>n;
+     AddFirst(m,n) ;
+  }
+  else if(func==2) 
+  DelFirst() ;
+  else if(func==3)
+  {  int m,n;
+     cin>>m>>n;
+     deleteNode(m,n);
+  }
+  else if(func==4)
+  {  int d;
+     cin>>d;
+     distance(d);
+  }
+  else if(func==5)
+  {  int m,n;
+     cin>>m>>n;
+     search(m,n);
+  }
+  else if(func==6) 
+  { int l;
+    l=length();
+  cout<<"The length of the string is:"<<l<<"\n"<<endl;
+  }
+
+  testcase--;
+  }
+
+return 0;
+}
 
