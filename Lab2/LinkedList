@@ -1,0 +1,167 @@
+#include<iostream>
+#include<cmath>
+
+
+using namespace std;
+
+struct node{
+int a,b;
+struct node* ptr;
+};
+  
+
+
+int main()
+{ 
+
+  int testcase
+  cout<<"Enter the number of times you want to test:";
+  cin>>testcase;
+  
+  int func;
+
+  while(testcase)
+ {
+  
+  if(func==1) 
+  {  int x,y;
+     cin>>func>>x>>y>>endl;
+     AddFirst(head,x,y) ;
+  }
+  else if(func==2) 
+  DelFirst(head) ;
+  else if(func==3)
+  {  int x,y;
+     cin>>func>>x>>y>>endl;
+     deleteNode(head,x,y);
+  }
+  else if(func==4)
+  {  int d;
+     cin>>d;
+     distance(head,d);
+  }
+  else if(func==5)
+  {  int x,y;
+     cin>>func>>x>>y>>endl;
+     search(head,x,y)
+  }
+  else if(func==6) 
+  cout<<length(head)<<"\n"<<endl;
+
+
+  testcase--;
+
+ }
+
+return 0;
+}
+
+void AddFirst(struct node** head, int x,int y )
+{  if (*head == NULL) 
+   cout<<"-1";
+   return; 
+
+   struct node* newnode = (struct node*) malloc(sizeof(struct node));
+   newnode->a=x;
+   newnode->b=y;
+   newnode->ptr= (*head);
+   (*head)=newnode;
+}
+
+
+void DelFirst(struct node* head)
+{
+    if (head == NULL) 
+        ; 
+  
+    struct node* temp = head; 
+    head = head->ptr; 
+  
+    delete temp;
+     
+} 
+
+  
+void search(struct node* head, int x,int y)  
+{  
+    struct node* current = head;
+    int count=0;
+
+    while (current != NULL)  
+    {  
+        if (current->a == x && current->b == y) 
+           {cout<<"True";  
+            count++;
+           }
+        current = current->ptr; 
+ 
+    }  
+
+    if(count=0) cout<<"False";
+   
+}  
+
+void deleteNode(struct node **head, int x,int y) 
+{  
+    struct node* current = *head;
+    int count=0;
+
+    while (current != NULL)  
+    {  
+        if (current->a == x && current->b == y) 
+           {cout<<"True";  
+            count++;
+           }
+        current = current->ptr; 
+ 
+    }  
+
+    if(count=0) cout<<"False";
+   if (*head == NULL) 
+   cout<<"-1";
+   return; 
+   struct node* temp = *head; 
+ 
+    if (position == 0) 
+    { 
+        *head = temp->ptr;   
+        free(temp);              
+        return; 
+    } 
+  
+    
+    for (int i=0; temp!=NULL && i<position-1; i++) 
+         temp = temp->ptr; 
+    if (temp == NULL || temp->ptr == NULL) 
+    cout<<"-1";
+    return; 
+    struct node *next = temp->ptr->ptr; 
+    free(temp->ptr);  
+  
+    temp->ptr = ptr; 
+}
+
+int length(struct node* head)
+{
+    int count = 0;
+    node* current = head;
+    while (current != NULL)  
+    {  
+        count++;  
+        current = current->ptr;  
+    }  
+    return count;
+}
+
+void distance(struct node* head,int d)
+{   struct node* current = head;
+    while (current != NULL)  
+
+    {   int p,q;
+        current->a=p;
+        current->b=q;
+        if ((p*p+q*q) <= d*d) 
+        cout<<"("<<p<<","<<q<<")"<<endl;
+        current = current->ptr;
+  
+    }  
