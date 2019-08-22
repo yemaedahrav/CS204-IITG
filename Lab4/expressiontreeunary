@@ -1,0 +1,304 @@
+#include<bits/stdc++.h>
+#include<iostream>
+#include<cmath>
+
+using namespace std;
+
+//Precedence order function
+
+int prec(char c) 
+    {//Precedence order Rules
+    if(c == '^') 
+    return 3; 
+    else if(c == '*' || c == '/') 
+    return 2; 
+    else if(c == '+' || c == '-') 
+    return 1; 
+    else
+    return -1; 
+    }
+
+//Infix to Postfix cnversion function
+
+string infixtopostfix(string s) 
+{   
+    std::stack<char> st; 
+    st.push('N'); 
+    int l = s.length(); 
+    string postfix; 
+    int i=0;
+
+    while(i < l) 
+    {   
+        if(s[i] == '(') 
+        {st.push('(');
+         i++;
+        } 
+          
+        else if(s[i] == ')') 
+        { 
+            while(st.top() != 'N' && st.top() != '(') 
+            { 
+                char c = st.top(); 
+                st.pop(); 
+                postfix += c;
+                postfix+=','; 
+
+            } 
+
+            if(st.top() == '(') 
+            { 
+                char c = st.top(); 
+                st.pop(); 
+            }
+
+            i++;
+ 
+        } 
+          
+        else if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/'||s[i]=='^')
+        { 
+          while(st.top() != 'N' && prec(s[i]) <= prec(st.top())) 
+               { 
+                  char c = st.top(); 
+                  st.pop(); 
+                  postfix += c; 
+                  postfix+=','; 
+               } 
+             st.push(s[i]);
+
+          i++;
+  
+        } 
+
+       else 
+       { 
+         while(s[i]>'/'&&s[i]<':')
+         {postfix+=s[i];
+          i++;
+         }
+         postfix+=',';
+       }
+     
+     }  
+     
+    while(st.top() != 'N') 
+    { 
+        char c = st.top(); 
+        st.pop(); 
+        postfix += c; 
+        postfix+=',';
+    } 
+
+ return postfix;
+
+}
+
+//Postfix to Tree Conversion 
+
+struct node{
+        string data;
+        node* left;
+        node* right;
+           };
+
+//for checking symbol is operand or operator
+
+bool isoperator(char inputchar)
+{   
+    if (inputchar == '+' || inputchar == '-' || inputchar == '*' || inputchar
+            == '/')
+        return true;
+    return false;
+}
+ 
+node*  newnode(string numeral)
+{  
+  node* temp=new node;
+  temp->left=temp->right=NULL;
+  temp->data =numeral;
+  return temp;
+}
+  
+node* createexprtree(string x)
+{
+    stack <node *> st;
+    node* newl; 
+    node* ptr1;
+    node* ptr2;
+
+    int i=0;
+  
+    while(i<x.length())
+    { 
+        if(isoperator(x[i]))
+        { string y="";
+                while(x[i]!=',')
+                {
+                   y+=x[i];
+                   i++;
+                }
+
+        newl=newnode(y);
+        st.push(newl);
+        i++;
+        }
+        else
+        {  string y="";
+           while(x[i]!=',')
+           { 
+              y+=x[i];
+              i++;
+           }
+
+        newl=newnode(y);
+        ptr1 = st.top();
+        st.pop();
+        ptr2 = st.top();
+        st.pop();
+   
+        newl->right=ptr1;
+        newl->left=ptr2;
+     
+        st.push(newl);
+        i++;
+        }
+ 
+    }
+
+ newl=st.top();
+ st.pop();
+
+ return newl;
+
+}
+ 
+
+void postOrder(node *tree)
+{
+    if (tree != NULL)
+    {
+        postOrder(tree->left);
+        postOrder(tree->right);
+        cout << tree->data;
+    }
+}
+
+//Converting character to integer for evaluation 
+
+int converttoint(string s)  
+{  
+    int num = 0;  
+    if(s[0]!='-') 
+        for (int i=0; i<s.length(); i++)  
+            num = num*10 + (int(s[i])-48); 
+    else
+        for (int i=1; i<s.length(); i++)  
+        { 
+            num = num*10 + (int(s[i])-48);  
+            num = num*-1; 
+        } 
+      
+    return num;  
+}  
+  
+//Tree Evaluation
+
+int evaluate(node* root)  
+{  
+    if (!root)  
+        return 0;  
+    
+    if (!root->left && !root->right)  
+        return converttoint(root->data);  
+    
+    int lval = evaluate(root->left);  
+  
+    int rval = evaluate(root->right);  
+    
+    if (root->data=="+")  
+        return lval+rval;  
+  
+    if (root->data=="-")  
+        return lval-rval;  
+  
+    if (root->data=="*")  
+        return lval*rval;
+  
+    if (root->data=="/")
+        return lval/rval;  
+   
+    if (root->data=="^")
+        return pow(lval,rval);
+}  
+
+bool isdigit(char exp){
+	if(exp>='0' && exp<='9') return true;
+	return false;
+}
+
+string getString(char q) 
+{ 
+
+    string str(1, q); 
+  
+    return str;    
+}
+
+string unarycheck(string p){
+	char prev;
+	char curr;
+	int index;
+	bool present;
+	do{
+              present=false;
+	      for(int i=1;i<p.length();i++){
+	           curr=p[i];
+		   prev=p[i-1];
+		   if(curr=='-'&&(prev=='(' || isoperator(prev))){
+	    present=true;
+	    index=i;
+	    while(isdigit(p[++i]));
+            p.insert(index,getString('('));				
+            p.insert(index+1,getString('0'));
+	    p.insert(i+2,getString(')'));
+	    break;
+	}
+     }
+   }
+	while(present);
+	return p;
+}
+  
+
+int main()
+{
+
+int tc;
+{cout<<"Enter the number of Testcases\n";}
+cin>>tc;
+
+while(tc)
+{ 
+
+int ip;
+cout<<"Enter the number of input lines\n";
+cin>>ip;
+
+for(int i=0;i++;i<ip)
+{ 
+  string inputline;
+  getline(cin, inputline); 
+  inputline=unarycheck(inputline);
+  string postfix = infixtopostfix(inputline);
+  node* treefinal = createexprtree(postfix);
+  cout<<evaluate(treefinal);
+  cout<<"\n";
+  
+}
+
+tc--;
+}
+
+return 0;
+}
