@@ -48,7 +48,7 @@ int main(){
 
 		if(hashTable[hash_func(revstr)].size()!=0){
 			for(int i=0;i<hashTable[hash_func(revstr)].size();i++){
-				if(hashTable[hash_func(revstr)][i]==revstr){
+				if(hashTable[hash_func(revstr)][i]==temp{
 					final=true;
 					break;
 				}
