@@ -1,35 +1,58 @@
-#include<bits/stdc++.h>
-
+#include <bits/stdc++.h>
 using namespace std;
-
-string reverse(string word)
-       {  
-          string revword = "";
-          int n=word.length();
-          for(int i=n-1;i>=0;i--)
-             {  revword.push_back(word[i]); }             }
-       
-          return revword;
-     
-       }
-
-int main()
+#define lli long long
+#define fori(n) for(lli i=0;i<n;i++)
+bool binarySearch(vector<string> arr,int l, int r,string x) 
 { 
-  long long int n;
-  cin>>n;
+    if (r >= l) { 
+        int mid = l + (r - l) / 2; 
 
-  while(n--)
-   {  
-      string word;
-      cin>>word;
-      
-      if(word!=revword)
-        {  
+        if (arr[mid] == x) 
+            return true; 
 
+        if (arr[mid] > x) 
+            return binarySearch(arr, l, mid - 1, x); 
+  
 
-        }
-   }
+        return binarySearch(arr, mid + 1, r, x); 
+    } 
+  
+    return false; 
+}
 
-return 0;
+int main(){
+	int n;
+	cin>>n;
+	vector<string> inps;
+	string temp,revstr;
+	for(int i=0;i<n;i++){
+		cin>>temp;
+		revstr=temp;
+		reverse(revstr.begin(),revstr.end());
+		
+		if(temp!=revstr){
+			inps.push_back(temp);
+			
+		}
+			
+	}
+	sort(inps.begin(),inps.end());
+	
+	cout<<endl;	
+	bool final=false;
+	for(int i=0;i<inps.size();i++){
+		tempstr=inps[i];
+		revstr=tempstr;
+		reverse(revstr.begin(),revstr.end());
+		
+
+		if(binarySearch(inps,0,inps.size()-1,tempstr)){
+			if(binarySearch(inps,0,inps.size()-1,revstr)){final=true;break;}
+			
+		}
+
+	}
+	if(final) cout<<"YES"<<endl;
+	else cout<<"NO"<<endl;
 
 }
